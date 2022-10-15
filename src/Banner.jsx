@@ -1,26 +1,46 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import './Banner.css';
+import axios from './axios';
+import requests from './Requests';
 
 function Banner() {
+
+const [movie,setMovie]=useState([]);
+
+useEffect(()=>{
+  async function fetchData(){
+    const request=await axios.get(requests.fetchNetflixOriginals);
+    setMovie(request.data.results[
+      Math.floor(Math.random()*request.data.results.length-1)
+    ]);
+    return request;
+  }
+  fetchData();
+},[]);
+
+
+  function truncate(string,n){
+    return string?.length>n?string.substr(0,n-1)+'...':string;
+  }
   return (
     <header className='banner' style={{
       backgroundSize:"cover",
       backgroundPosition:"center center",
-      backgroundImage:`url("https://c8.alamy.com/comp/2DCB92D/logos-of-the-on-demand-video-site-and-app-netflix-on-a-heap-web-banner-size-with-copy-space-selective-focus-2DCB92D.jpg")`
+      backgroundImage:`url("https://image.tmdb.org/t/p/original/${movie?.backdrop_path}")`
     }}>
 
     <div className="banner__contents">
       <h1 className="banner__title">
-        Movie Name
+        {movie?.title ||movie?.name||movie?.original_name}
       </h1>
       <div className="banner__buttons">
         <button className='banner__button'>Play</button>
         <button className='banner__button'>My List</button>
-        
       </div>
-      <div className='banner__fadeBottom'></div>
+      
+      <div className="banner__description">{truncate(movie?.overview,100)}</div>
     </div>
-
+    <div className='banner__fadeBottom'></div>
     </header>
   )
 }
