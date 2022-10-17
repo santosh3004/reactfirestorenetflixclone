@@ -13,10 +13,8 @@ export const userSlice = createSlice({
       state.user=null;
     }
   },
-})
+});
 
-export const { login,logout} = userSlice.actions
-
-export const selectUser = (state) => state.user.value
-
-export default userSlice.reducer
+export const { login,logout} = userSlice.actions;
+export const selectUser=(state)=>{return state.user};
+export default userSlice.reducer;

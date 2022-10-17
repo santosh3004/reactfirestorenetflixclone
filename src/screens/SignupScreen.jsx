@@ -2,15 +2,18 @@ import React, { useRef } from 'react';
 import { auth } from '../firebase';
 import './SignupScreen.css';
 
+
 function SignupScreen() {
   const emailRef=useRef(null);
   const passwordRef=useRef(null);
+ 
   const register=(e)=>{
     e.preventDefault();
     auth.createUserWithEmailAndPassword(
       emailRef.current.value,
       passwordRef.current.value
-    ).then((authUser)=>{console.log(authUser)}).catch(error=>{
+    ).then((authUser)=>{
+    }).catch(error=>{
       alert(error.message);
     });
   };
@@ -21,7 +24,7 @@ function SignupScreen() {
       emailRef.current.value,
       passwordRef.current.value
     ).then(authUser=>{
-      console.log(authUser);
+      
     }).catch(error=>{
       alert(error.message);
     });
