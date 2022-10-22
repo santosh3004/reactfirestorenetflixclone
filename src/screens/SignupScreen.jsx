@@ -3,7 +3,7 @@ import { auth } from '../firebase';
 import './SignupScreen.css';
 
 
-function SignupScreen() {
+function SignupScreen(props) {
   const emailRef=useRef(null);
   const passwordRef=useRef(null);
  
@@ -13,6 +13,10 @@ function SignupScreen() {
       emailRef.current.value,
       passwordRef.current.value
     ).then((authUser)=>{
+      props.setuser({
+        uid:authUser.uid,
+        email:authUser.email,
+      })
     }).catch(error=>{
       alert(error.message);
     });
@@ -24,7 +28,9 @@ function SignupScreen() {
       emailRef.current.value,
       passwordRef.current.value
     ).then(authUser=>{
-      
+      props.setuser({
+        email:authUser.email,
+      })
     }).catch(error=>{
       alert(error.message);
     });

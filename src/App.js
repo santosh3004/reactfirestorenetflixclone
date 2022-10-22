@@ -1,43 +1,52 @@
 
 import './App.css';
-import { useEffect } from 'react';
+import { useLayoutEffect,useState } from 'react';
 import { auth } from './firebase';
 import HomeScreen from './screens/HomeScreen';
 import {BrowserRouter as Router,Routes,Route} from "react-router-dom";
 import LoginScreen from './screens/LoginScreen';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, logout,selectUser } from './features/userSlice';
+// import { login, logout,selectUser } from './features/userSlice';
 import ProfileScreen from './screens/ProfileScreen';
 
 
 function App() {
-  const user=useSelector(selectUser);
-  const dispatch=useDispatch();
+  // const user=useSelector((selectUser));
+  // const dispatch=useDispatch();
+  // console.log(user);
+  const [user,setUser]=useState(null);
+  
 
-  useEffect(() => {
+  useLayoutEffect(() => {
    auth.onAuthStateChanged(
        (userAuth)=>{
       if(userAuth){
-        dispatch(
-          login({
+        setUser({
           uid:userAuth.uid,
-          email:userAuth.email,
-        })
-        );
+          email:userAuth.email
+        });
+        localStorage.setItem("user",JSON.stringify({email:userAuth.email}));
+    //     dispatch(
+    //       login({
+    //       uid:userAuth.uid,
+    //       email:userAuth.email,
+    //     })
+    //     );
       }else{
-        dispatch(logout());
+        // dispatch(logout());
+        setUser(null);
       }
-    });
-  }, [dispatch]);
+  });
+    }, []);
 
   return (
     <div className="app">
       {!user ? (
-          <LoginScreen/> 
+          <LoginScreen setuser={setUser}/> 
         ) : (
       <Router>
         <Routes>
-          <Route path='/profile' element={<ProfileScreen/>}/>
+          <Route path='/profile' loggeduser={user} element={<ProfileScreen/>}/>
           <Route exact path='/' element={<HomeScreen/>} />
         </Routes>
       </Router>)}
