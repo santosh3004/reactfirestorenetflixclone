@@ -6,13 +6,32 @@ import { auth } from '../firebase';
 // import {signOut} from 'firebase/auth'
 // import { selectUser } from '../features/userSlice';
 import { useNavigate } from 'react-router-dom';
+import PlanScreen from './PlanScreen';
 function ProfileScreen(props) {
   // const history=useNavigate();
   const [user,setUser]=useState(null);
   useEffect(()=>{
-    setUser(JSON.parse(localStorage.getItem('user')));
-  },[]);
-
+    auth.onAuthStateChanged(
+      (userAuth)=>{
+     if(userAuth){
+       setUser({
+         uid:userAuth.uid,
+         email:userAuth.email
+       });
+       localStorage.setItem("user",user);
+   //     dispatch(
+   //       login({
+   //       uid:userAuth.uid,
+   //       email:userAuth.email,
+   //     })
+   //     );
+     }else{
+       // dispatch(logout());
+       setUser(null);
+     }
+    //setUser(JSON.parse(localStorage.getItem('user')));
+  })},[]);
+console.log(user);
   return (
     <div className='profileScreen'>
       <Nav/>
@@ -24,6 +43,10 @@ function ProfileScreen(props) {
             <h2 className="">{user?.email}</h2>
             <div className="profileScreen__plans">
               <h3>Plans{props.email}</h3>
+              <PlanScreen user={user}/>
+
+
+
               <button onClick={()=>{auth.signOut()}} className='profileScreen__signOut'>Sign Out</button>
             </div>
           </div>

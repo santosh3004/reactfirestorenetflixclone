@@ -25,7 +25,7 @@ function App() {
           uid:userAuth.uid,
           email:userAuth.email
         });
-        localStorage.setItem("user",JSON.stringify({email:userAuth.email}));
+        localStorage.setItem("user",user);
     //     dispatch(
     //       login({
     //       uid:userAuth.uid,
@@ -46,7 +46,7 @@ function App() {
         ) : (
       <Router>
         <Routes>
-          <Route path='/profile' loggeduser={user} element={<ProfileScreen/>}/>
+          <Route path='/profile' element={<ProfileScreen loggeduser={user} />}/>
           <Route exact path='/' element={<HomeScreen/>} />
         </Routes>
       </Router>)}
